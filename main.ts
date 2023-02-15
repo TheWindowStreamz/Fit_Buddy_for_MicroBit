@@ -116,6 +116,27 @@ if (input.temperature() >= 40) {
         basic.showIcon(IconNames.Heart)
         basic.pause(100)
     }
+    for (let index = 0; index < 12; index++) {
+        if (input.compassHeading() >= 338 || input.compassHeading() < 23) {
+            basic.showArrow(ArrowNames.North)
+        } else if (input.compassHeading() >= 293) {
+            basic.showArrow(ArrowNames.NorthWest)
+        } else if (input.compassHeading() >= 248) {
+            basic.showArrow(ArrowNames.West)
+        } else if (input.compassHeading() >= 203) {
+            basic.showArrow(ArrowNames.SouthWest)
+        } else if (input.compassHeading() >= 158) {
+            basic.showArrow(ArrowNames.South)
+        } else if (input.compassHeading() >= 113) {
+            basic.showArrow(ArrowNames.SouthEast)
+        } else if (input.compassHeading() >= 68) {
+            basic.showArrow(ArrowNames.East)
+        } else if (input.compassHeading() >= 23) {
+            basic.showArrow(ArrowNames.NorthEast)
+        } else {
+            basic.showString("?")
+        }
+    }
     basic.clearScreen()
     basic.showString("Hello!")
     controlmodeNum = 1
