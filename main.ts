@@ -1,12 +1,14 @@
 buttonClicks.onButtonSingleClicked(buttonClicks.AorB.B, function () {
-    if (controlmodeNum == 4) {
+    if (controlmodeNum == 5) {
         controlmodeNum = 1
     } else {
         controlmodeNum += 1
     }
 })
 buttonClicks.onButtonDoubleClicked(buttonClicks.AorB.A, function () {
-    if (controlmodeNum == 3) {
+    if (controlmodeNum == 4) {
+        keyboard.sendString(keyboard.rawScancode(85))
+    } else if (controlmodeNum == 3) {
         media.sendCode(media.keys(media._MediaKey.vol_down))
     } else {
         basic.showNumber(StepsHighScore)
@@ -15,6 +17,7 @@ buttonClicks.onButtonDoubleClicked(buttonClicks.AorB.A, function () {
 bluetooth.onBluetoothConnected(function () {
     if (inputtemperatureisTooHot == 0) {
         media.startMediaService()
+        keyboard.startKeyboardService()
         basic.showIcon(IconNames.Yes)
         basic.pause(1000)
         basic.clearScreen()
@@ -28,14 +31,18 @@ bluetooth.onBluetoothDisconnected(function () {
     }
 })
 buttonClicks.onButtonHeld(buttonClicks.AorB.B, function () {
-    if (controlmodeNum == 3) {
+    if (controlmodeNum == 4) {
+        keyboard.sendSimultaneousKeys("" + keyboard.modifiers(keyboard._Modifier.control) + keyboard.modifiers(keyboard._Modifier.shift) + "p", false)
+    } else if (controlmodeNum == 3) {
         media.sendCode(media.keys(media._MediaKey.next))
     } else {
         control.reset()
     }
 })
 buttonClicks.onButtonSingleClicked(buttonClicks.AorB.A, function () {
-    if (controlmodeNum == 3) {
+    if (controlmodeNum == 4) {
+        keyboard.sendSimultaneousKeys("" + keyboard.modifiers(keyboard._Modifier.control) + keyboard.rawScancode(116), false)
+    } else if (controlmodeNum == 3) {
         media.sendCode(media.keys(media._MediaKey.playPause))
     } else {
         if (StepsIsCounting == 0) {
@@ -64,7 +71,9 @@ input.onGesture(Gesture.Shake, function () {
     }
 })
 buttonClicks.onButtonDoubleClicked(buttonClicks.AorB.B, function () {
-    if (controlmodeNum == 3) {
+    if (controlmodeNum == 4) {
+        keyboard.sendString(keyboard.rawScancode(86))
+    } else if (controlmodeNum == 3) {
         media.sendCode(media.keys(media._MediaKey.vol_up))
     } else {
         if (MoveDoReminder == 1) {
@@ -79,13 +88,14 @@ timeanddate.onDayChanged(function () {
     basic.showString("Good Morning!")
 })
 buttonClicks.onButtonHeld(buttonClicks.AorB.A, function () {
-    if (controlmodeNum == 3) {
+    if (controlmodeNum == 4) {
+        keyboard.sendString(keyboard.keys(keyboard._Key.escape))
+    } else if (controlmodeNum == 3) {
         media.sendCode(media.keys(media._MediaKey.previous))
     } else {
         StepsHighScore = 0
     }
 })
-let ledenableledTimer = 0
 let MoveTime = 0
 let basicclearScreenisClearingScreen = 0
 let StepsCount = 0
@@ -100,7 +110,7 @@ if (input.temperature() >= 40) {
     led.setBrightness(64)
 } else {
     inputtemperatureisTooHot = 0
-    led.setBrightness(191)
+    led.setBrightness(255)
     for (let index = 0; index < 4; index++) {
         basic.showIcon(IconNames.SmallHeart)
         basic.showIcon(IconNames.Heart)
@@ -112,7 +122,6 @@ if (input.temperature() >= 40) {
     MoveDoReminder = 1
 }
 loops.everyInterval(1000, function () {
-    ledenableledTimer += 1
     if (MoveDoReminder == 1) {
         MoveTime += 1
     }
@@ -122,12 +131,14 @@ basic.forever(function () {
         control.reset()
     } else if (input.temperature() < 40) {
         inputtemperatureisTooHot = 0
-    } else if (inputtemperatureisTooHot >= 1) {
+    } else if (inputtemperatureisTooHot == 1) {
         music.playMelody("B C5 F G A B C5 - ", 318)
+        basic.showString("Heat Warning!")
         music.playMelody("B C5 F G A B C5 - ", 318)
+        basic.showNumber(input.temperature())
     }
     if (input.pinIsPressed(TouchPin.P2)) {
-        timeanddate.advanceBy(1, timeanddate.TimeUnit.Days)
+        timeanddate.advanceBy(1, timeanddate.TimeUnit.Minutes)
         basic.pause(250)
     }
 })
@@ -138,50 +149,51 @@ control.inBackground(function () {
         } else {
             led.enable(true)
         }
-        if (true) {
-            basic.showString("Heat Warning!")
-            basic.showNumber(input.temperature())
-        } else if (MoveTime >= 900 && MoveDoReminder == 1) {
-            if (basicclearScreenisClearingScreen == 1) {
+        if (inputtemperatureisTooHot == 0) {
+            if (MoveTime >= 900 && MoveDoReminder == 1) {
                 led.enable(true)
                 basic.showIcon(IconNames.Heart)
                 basic.pause(10000)
                 basic.clearScreen()
-                led.enable(false)
-            } else {
-                basic.showIcon(IconNames.Heart)
-                basic.pause(20000)
-                basic.clearScreen()
-            }
-        } else if (controlmodeNum == 3) {
-            if (media.isEnabled()) {
-                basic.showIcon(IconNames.Yes)
-            } else {
-                basic.showIcon(IconNames.No)
-            }
-        } else if (controlmodeNum == 2) {
-            basic.showString(timeanddate.date(timeanddate.DateFormat.MDY))
-        } else if (controlmodeNum == 1) {
-            basic.showString(timeanddate.time(timeanddate.TimeFormat.HMMAMPM))
-        } else if (controlmodeNum == 4) {
-            if (input.compassHeading() >= 338 || input.compassHeading() < 23) {
-                basic.showArrow(ArrowNames.North)
-            } else if (input.compassHeading() >= 293) {
-                basic.showArrow(ArrowNames.NorthWest)
-            } else if (input.compassHeading() >= 248) {
-                basic.showArrow(ArrowNames.West)
-            } else if (input.compassHeading() >= 203) {
-                basic.showArrow(ArrowNames.SouthWest)
-            } else if (input.compassHeading() >= 158) {
-                basic.showArrow(ArrowNames.South)
-            } else if (input.compassHeading() >= 113) {
-                basic.showArrow(ArrowNames.SouthEast)
-            } else if (input.compassHeading() >= 68) {
-                basic.showArrow(ArrowNames.East)
-            } else if (input.compassHeading() >= 23) {
-                basic.showArrow(ArrowNames.NorthEast)
-            } else {
-                basic.showString("?")
+                if (basicclearScreenisClearingScreen == 1) {
+                    led.enable(false)
+                }
+            } else if (controlmodeNum == 5) {
+                if (input.compassHeading() >= 338 || input.compassHeading() < 23) {
+                    basic.showArrow(ArrowNames.North)
+                } else if (input.compassHeading() >= 293) {
+                    basic.showArrow(ArrowNames.NorthWest)
+                } else if (input.compassHeading() >= 248) {
+                    basic.showArrow(ArrowNames.West)
+                } else if (input.compassHeading() >= 203) {
+                    basic.showArrow(ArrowNames.SouthWest)
+                } else if (input.compassHeading() >= 158) {
+                    basic.showArrow(ArrowNames.South)
+                } else if (input.compassHeading() >= 113) {
+                    basic.showArrow(ArrowNames.SouthEast)
+                } else if (input.compassHeading() >= 68) {
+                    basic.showArrow(ArrowNames.East)
+                } else if (input.compassHeading() >= 23) {
+                    basic.showArrow(ArrowNames.NorthEast)
+                } else {
+                    basic.showString("?")
+                }
+            } else if (controlmodeNum == 4) {
+                if (keyboard.isEnabled()) {
+                    basic.showIcon(IconNames.Yes)
+                } else {
+                    basic.showIcon(IconNames.No)
+                }
+            } else if (controlmodeNum == 3) {
+                if (media.isEnabled()) {
+                    basic.showIcon(IconNames.Yes)
+                } else {
+                    basic.showIcon(IconNames.No)
+                }
+            } else if (controlmodeNum == 2) {
+                basic.showString(timeanddate.date(timeanddate.DateFormat.MDY))
+            } else if (controlmodeNum == 1) {
+                basic.showString(timeanddate.time(timeanddate.TimeFormat.HMMAMPM))
             }
         }
     }
