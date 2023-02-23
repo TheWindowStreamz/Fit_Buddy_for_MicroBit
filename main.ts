@@ -5,6 +5,18 @@ buttonClicks.onButtonSingleClicked(buttonClicks.AorB.B, function () {
         controlmodeNum += 1
     }
 })
+input.onGesture(Gesture.EightG, function () {
+    controlmodeNum = 0
+    basic.showNumber(3)
+    basic.pause(1000)
+    basic.showNumber(2)
+    basic.pause(1000)
+    basic.showNumber(1)
+    basic.pause(1000)
+    basic.showNumber(0)
+    basic.pause(1000)
+    control.reset()
+})
 buttonClicks.onButtonDoubleClicked(buttonClicks.AorB.A, function () {
     if (controlmodeNum == 4) {
         keyboard.sendString(keyboard.rawScancode(85))
@@ -86,18 +98,6 @@ buttonClicks.onButtonDoubleClicked(buttonClicks.AorB.B, function () {
 timeanddate.onDayChanged(function () {
     basic.pause(25200000)
     basic.showString("Good Morning!")
-})
-input.onGesture(Gesture.ThreeG, function () {
-    controlmodeNum = 0
-    basic.showNumber(3)
-    basic.pause(1000)
-    basic.showNumber(2)
-    basic.pause(1000)
-    basic.showNumber(1)
-    basic.pause(1000)
-    basic.showNumber(0)
-    basic.pause(1000)
-    control.reset()
 })
 buttonClicks.onButtonHeld(buttonClicks.AorB.A, function () {
     if (controlmodeNum == 4) {
