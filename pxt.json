@@ -1,5 +1,5 @@
 {
-    "name": "Fit Buddy for Micro:Bit v1.0",
+    "name": "Fit Buddy for Micro:Bit v2.0",
     "description": "",
     "dependencies": {
         "core": "*",
@@ -7,7 +7,15 @@
         "microbit-pxt-timeanddate": "github:bsiever/microbit-pxt-timeanddate#v2.0.33",
         "microbit-pxt-clicks": "github:bsiever/microbit-pxt-clicks#v0.2.2",
         "bluetooth": "*",
-        "microbit-pxt-blehid": "github:bsiever/microbit-pxt-blehid#v0.0.23"
+        "microbit-pxt-blehid": "github:bsiever/microbit-pxt-blehid#v0.0.23",
+        "datalogger": "*",
+        "audio-recording": "*",
+        "microbit-pxt-rotate": "github:bsiever/microbit-pxt-rotate#v0.1.6",
+        "power": "github:microbit-foundation/pxt-microbit-v2-power#v0.2.3",
+        "data-streamer": "github:microsoft/pxt-data-streamer#v0.1.3",
+        "pxt-morse": "github:bsiever/pxt-morse#v2.0.0",
+        "smarttools": "github:51bit/smarttools#v0.3.4",
+        "automationbit": "github:pimoroni/pxt-automationbit#v0.0.2"
     },
     "files": [
         "main.blocks",
@@ -21,7 +29,7 @@
         "branch": "v5.0.12",
         "tag": "v5.0.12",
         "commits": "https://github.com/microsoft/pxt-microbit/commits/97491d6832cccab6b5bdc05b58e4c6b5dcc18cdd",
-        "target": "5.0.12",
+        "target": "6.0.17",
         "pxt": "8.0.7",
         "targetId": "microbit"
     },
